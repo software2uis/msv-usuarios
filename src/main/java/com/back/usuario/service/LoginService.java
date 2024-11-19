@@ -10,6 +10,10 @@ import java.util.Map;
 public class LoginService {
     private final Map<String, User> users = new HashMap<>();
 
+    // Variables globales para la sesión activa
+    private String activeUsername = null;
+    private boolean isActiveSession = false;
+
     public LoginService() {
         users.put("pepe", new User("pepe", "741"));
         users.put("luis", new User("luis", "852"));
@@ -20,6 +24,9 @@ public class LoginService {
         User user = users.get(username);
         if (user != null && user.getPassword().equals(password)) {
             user.setLoggedIn(true);
+            // Actualizamos la sesión activa
+            activeUsername = username;
+            isActiveSession = true;
             return "Login successful for user: " + username;
         }
         return "Invalid username or password";
@@ -29,6 +36,11 @@ public class LoginService {
         User user = users.get(username);
         if (user != null && user.isLoggedIn()) {
             user.setLoggedIn(false);
+            // Restablecemos las variables globales si el usuario activo cierra sesión
+            if (username.equals(activeUsername)) {
+                activeUsername = null;
+                isActiveSession = false;
+            }
             return "User " + username + " logged out successfully.";
         }
         return "User " + username + " is not logged in.";
@@ -39,12 +51,11 @@ public class LoginService {
         return user != null && user.isLoggedIn();
     }
 
-    public String getActiveSession() {
-        for (User user : users.values()) {
-            if (user.isLoggedIn()) {
-                return "Active session: " + user.getUsername();
-            }
-        }
-        return "No active sessions.";
+    public Map<String, Object> getActiveSession() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("username", activeUsername != null ? activeUsername : "No active user");
+        response.put("isLoggedIn", isActiveSession);
+        return response;
     }
 }
+
