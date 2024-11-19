@@ -4,6 +4,8 @@ import com.back.usuario.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("api/user/login")
@@ -29,7 +31,8 @@ public class LoginController {
     }
 
     @GetMapping("/active-session")
-    public String getActiveSession() {
+    public Map<String, Object> getActiveSession() {
         return loginService.getActiveSession();
     }
+
 }
