@@ -1,8 +1,14 @@
 package com.back.usuario.controller;
 
 import com.back.usuario.service.LoginService;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RestController
@@ -29,7 +35,8 @@ public class LoginController {
     }
 
     @GetMapping("/active-session/{username}")
-    public boolean getActiveSession(@PathVariable String username) {
-        return loginService.isLoggedIn(username);
+    public ResponseEntity<Boolean> getActiveSession(@PathVariable String username) {
+        return new ResponseEntity<Boolean>(loginService.isLoggedIn(username), HttpStatus.OK);
     }
+
 }
