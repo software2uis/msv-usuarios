@@ -28,8 +28,8 @@ public class LoginController {
         return isLoggedIn ? "User " + username + " is logged in." : "User " + username + " is not logged in.";
     }
 
-    @GetMapping("/active-session")
-    public String getActiveSession() {
-        return loginService.getActiveSession();
+    @GetMapping("/active-session/{username}")
+    public boolean getActiveSession(@PathVariable String username) {
+        return loginService.isLoggedIn(username);
     }
 }
